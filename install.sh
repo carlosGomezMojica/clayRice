@@ -241,7 +241,7 @@ install_dev() {
   install_nvm_for_zsh
   
   DID_DEV=1
-
+}
 
 install_neovim() {
   log "--- Módulo: Neovim ---"
