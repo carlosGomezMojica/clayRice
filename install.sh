@@ -285,6 +285,7 @@ install_office() {
 
 install_fonts() {
   log "--- Módulo: Fuentes ---"
+  install_pkgs "${font_pkgs[@]}"
   aur_install "${aur_fonts_pkgs[@]}"
   log "Actualizando caché de fuentes..."
   run "fc-cache -fv"
