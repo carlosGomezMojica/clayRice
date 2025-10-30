@@ -1,6 +1,6 @@
 # Kanagawa theme for Yazi
 
-[manager]
+[mgr]
 cwd = { fg = "#7E9CD8", bold = true }
 boder = "#2D4F67"
 
