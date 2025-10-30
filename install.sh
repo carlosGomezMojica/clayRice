@@ -238,8 +238,30 @@ install_shell() {
   ensure_line "alias n='nvim'" "$zshrc"
   ensure_line "alias lg='lazygit'" "$zshrc"
 
-  log "Para activar Zsh, ejecuta: chsh -s /bin/zsh"
+  log "Estableciendo Zsh como shell por defecto..."
+  run "$SUDO chsh -s /bin/zsh \"$(logname)\""
   DID_SHELL=1
+}
+
+setup_wallpapers() {
+    log "--- Configurando Wallpapers ---"
+    local wallpaper_dir="$HOME/Pictures/wallpapers"
+    local source_wallpaper_dir="$SCRIPT_DIR/wallpapers"
+
+    if [[ "$DRY_RUN" = "1" ]]; then
+        log "DRY-RUN: Crear directorio de wallpapers en $wallpaper_dir"
+        log "DRY-RUN: Copiar wallpapers de $source_wallpaper_dir a $wallpaper_dir"
+    else
+        log "Creando directorio de wallpapers en $wallpaper_dir..."
+        mkdir -p "$wallpaper_dir"
+
+        if [ -d "$source_wallpaper_dir" ]; then
+            log "Copiando wallpapers a $wallpaper_dir..."
+            cp -r "$source_wallpaper_dir"/* "$wallpaper_dir/"
+        else
+            log "Directorio de wallpapers de origen no encontrado en $source_wallpaper_dir. Saltando copia."
+        fi
+    fi
 }
 
 install_nvm_for_zsh() {
@@ -434,6 +456,7 @@ main() {
   fi
 
   install_themes
+  setup_wallpapers
 
   # generate_postinstall_doc
   log "== Setup finalizado =="
