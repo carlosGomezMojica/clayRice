@@ -26,6 +26,7 @@ DID_NEOVIM=0
 DID_APPS=0
 DID_OFFICE=0
 DID_FONTS=0
+DID_CONFIGS=0
 
 # --- Funciones de Utilidad y Logging ---
 
@@ -34,10 +35,10 @@ mkdir -p "$LOG_DIR"
 : >"$LOG_FILE"
 
 log() { printf "[%s] %s\n" "$(date '+%F %T')" "$*" | tee -a "$LOG_FILE"; }
-run() { 
-  if [[ "$DRY_RUN" = "1" ]]; then 
+run() {
+  if [[ "$DRY_RUN" = "1" ]]; then
     log "DRY-RUN: $*"
-  else 
+  else
     # Ejecutar con bash -lc para asegurar que el entorno (como fish) se cargue si es necesario
     bash -lc "$*" |& tee -a "$LOG_FILE"
   fi
@@ -65,6 +66,7 @@ BANDERAS:
   --apps          Instala aplicaciones de escritorio y productividad (navegador, etc.).
   --office        Instala LibreOffice y paquetes de idioma.
   --fonts         Instala una colección de Nerd Fonts.
+  --configs       Ejecuta el script de configuración de dotfiles.
   -h, --help      Muestra este mensaje de ayuda.
 
 VARIABLES DE ENTORNO:
@@ -102,19 +104,31 @@ require_sudo() {
 pkg_installed() { pacman -Q "$1" >/dev/null 2>&1; }
 
 install_pkgs() {
-  if [[ $# -eq 0 ]]; then log "No hay paquetes de pacman para instalar."; return; fi
+  if [[ $# -eq 0 ]]; then
+    log "No hay paquetes de pacman para instalar."
+    return
+  fi
   log "Instalando paquetes de pacman: $*"
   run "$SUDO pacman -Syu --needed --noconfirm $*"
 }
 
 have_aur_helper() {
-  if command -v yay >/dev/null 2>&1; then AUR_HELPER="yay"; return 0; fi
-  if command -v paru >/dev/null 2>&1; then AUR_HELPER="paru"; return 0; fi
+  if command -v yay >/dev/null 2>&1; then
+    AUR_HELPER="yay"
+    return 0
+  fi
+  if command -v paru >/dev/null 2>&1; then
+    AUR_HELPER="paru"
+    return 0
+  fi
   return 1
 }
 
 install_aur_helper_if_missing() {
-  if have_aur_helper; then log "AUR helper encontrado: $AUR_HELPER"; return; fi
+  if have_aur_helper; then
+    log "AUR helper encontrado: $AUR_HELPER"
+    return
+  fi
   log "Instalando yay como AUR helper..."
   install_pkgs "${base_devel_pkgs[@]}" # base-devel es un grupo, no un paquete
   local tmpdir
@@ -122,11 +136,17 @@ install_aur_helper_if_missing() {
   run "git clone https://aur.archlinux.org/yay-bin.git \"$tmpdir/yay-bin\""
   run "cd \"$tmpdir/yay-bin\" && makepkg -si --noconfirm"
   rm -rf "$tmpdir"
-  have_aur_helper || { log "Error: No se pudo instalar el AUR helper."; exit 1; }
+  have_aur_helper || {
+    log "Error: No se pudo instalar el AUR helper."
+    exit 1
+  }
 }
 
 aur_install() {
-  if [[ $# -eq 0 ]]; then log "No hay paquetes de AUR para instalar."; return; fi
+  if [[ $# -eq 0 ]]; then
+    log "No hay paquetes de AUR para instalar."
+    return
+  fi
   install_aur_helper_if_missing
   log "Instalando paquetes de AUR: $*"
   run "$AUR_HELPER -S --needed --noconfirm $*"
@@ -165,6 +185,15 @@ install_base() {
   log "--- Módulo: Base ---"
   install_pkgs "${base_pkgs[@]}"
   install_aur_helper_if_missing
+  setup_services
+}
+
+setup_services() {
+  log "--- Configurando servicios de sistema ---"
+  log "Habilitando servicios de audio PipeWire..."
+  run "systemctl --user enable --now pipewire-pulse.socket"
+  run "systemctl --user enable --now wireplumber.service"
+  # Otros servicios para Hyprland pueden ser añadidos aquí
 }
 
 install_shell() {
@@ -178,31 +207,31 @@ install_shell() {
   # Oh My Zsh crea un .zshrc. Hacemos una copia si ya existe uno.
   if [[ -f "$zshrc" && ! -f "${zshrc}.pre-omz" ]]; then
     if [[ "$DRY_RUN" = "1" ]]; then
-        log "DRY-RUN: Mover $zshrc a ${zshrc}.pre-omz"
+      log "DRY-RUN: Mover $zshrc a ${zshrc}.pre-omz"
     else
-        log "Guardando el .zshrc existente como .zshrc.pre-omz"
-        mv "$zshrc" "${zshrc}.pre-omz"
+      log "Guardando el .zshrc existente como .zshrc.pre-omz"
+      mv "$zshrc" "${zshrc}.pre-omz"
     fi
   fi
 
   # El paquete oh-my-zsh-git copia una plantilla a /usr/share/oh-my-zsh/zshrc
   # La copiamos al home del usuario si no existe.
   if [[ ! -f "$zshrc" ]]; then
-      if [[ "$DRY_RUN" = "1" ]]; then
-          log "DRY-RUN: Copiar plantilla de .zshrc a $zshrc"
-      else
-          log "Copiando plantilla de .zshrc a $HOME"
-          cp /usr/share/oh-my-zsh/zshrc "$zshrc"
-      fi
+    if [[ "$DRY_RUN" = "1" ]]; then
+      log "DRY-RUN: Copiar plantilla de .zshrc a $zshrc"
+    else
+      log "Copiando plantilla de .zshrc a $HOME"
+      cp /usr/share/oh-my-zsh/zshrc "$zshrc"
+    fi
   fi
 
   log "Añadiendo configuración personalizada a .zshrc..."
   ensure_line '' "$zshrc"
   ensure_line '# --- Configuración Personalizada ---' "$zshrc"
-  
+
   ensure_line '# Inicializar Zoxide' "$zshrc"
   ensure_line 'eval "$(zoxide init zsh)"' "$zshrc"
-  
+
   ensure_line '' "$zshrc"
   ensure_line '# Alias personalizados' "$zshrc"
   ensure_line "alias c='clear'" "$zshrc"
@@ -214,23 +243,23 @@ install_shell() {
 }
 
 install_nvm_for_zsh() {
-    log "Instalando NVM (Node Version Manager)..."
-    local nvm_dir="$HOME/.nvm"
-    local zshrc="$HOME/.zshrc"
+  log "Instalando NVM (Node Version Manager)..."
+  local nvm_dir="$HOME/.nvm"
+  local zshrc="$HOME/.zshrc"
 
-    if [[ -d "$nvm_dir" ]]; then
-        log "NVM ya parece estar instalado en $nvm_dir. Omitiendo descarga."
-    else
-        # El script de nvm se encarga de la instalación
-        run "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash"
-    fi
+  if [[ -d "$nvm_dir" ]]; then
+    log "NVM ya parece estar instalado en $nvm_dir. Omitiendo descarga."
+  else
+    # El script de nvm se encarga de la instalación
+    run "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash"
+  fi
 
-    log "Añadiendo NVM a la configuración de .zshrc..."
-    ensure_line '' "$zshrc"
-    ensure_line '# Configuración de NVM' "$zshrc"
-    ensure_line "export NVM_DIR=\"$([ -z \"${XDG_CONFIG_HOME-}\" ] && printf %s \"${HOME}/.nvm\" || printf %s \"${XDG_CONFIG_HOME}/nvm\")\"" "$zshrc"
-    ensure_line '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm' "$zshrc"
-    ensure_line '[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion' "$zshrc"
+  log "Añadiendo NVM a la configuración de .zshrc..."
+  ensure_line '' "$zshrc"
+  ensure_line '# Configuración de NVM' "$zshrc"
+  ensure_line "export NVM_DIR=\"$([ -z \"${XDG_CONFIG_HOME-}\" ] && printf %s \"${HOME}/.nvm\" || printf %s \"${XDG_CONFIG_HOME}/nvm\")\"" "$zshrc"
+  ensure_line '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm' "$zshrc"
+  ensure_line '[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion' "$zshrc"
 }
 
 install_dev() {
@@ -239,7 +268,7 @@ install_dev() {
   aur_install "${aur_dev_pkgs[@]}"
 
   install_nvm_for_zsh
-  
+
   DID_DEV=1
 }
 
@@ -264,8 +293,7 @@ install_neovim() {
 
   log "Clonando tu configuración de Neovim (starter)..."
   run "git clone https://github.com/carlosGomezMojica/starter.git ~/.config/nvim"
-  run "rm -rf ~/.config/nvim/.git || true"
-  
+
   log "Neovim configurado. Abre 'nvim' para completar la instalación de plugins."
   DID_NEOVIM=1
 }
@@ -292,40 +320,91 @@ install_fonts() {
   DID_FONTS=1
 }
 
+install_configs() {
+  log "--- Módulo: Configuración de Dotfiles ---"
+  run "./setup_configs.sh"
+  DID_CONFIGS=1
+}
+
+install_themes() {
+  log "--- Módulo: Temas ---"
+  if [ -f "./install_kvantum_themes.sh" ]; then
+    log "Ejecutando script de instalación de temas de Kvantum..."
+    run "./install_kvantum_themes.sh"
+  else
+    log "No se encontró el script 'install_kvantum_themes.sh'. Saltando."
+  fi
+}
+
 # --- Generación de Documento Post-Instalación ---
 generate_postinstall_doc() {
   # ... (La función generate_postinstall_doc se mantiene igual que en el script original)
   # Por brevedad, no se incluye aquí, pero se asumiría que está presente y funciona
-  # con las nuevas banderas DID_*. 
+  # con las nuevas banderas DID_*.
   log "Función de post-instalación omitida en este ejemplo de refactorización."
 }
 
 # --- Lógica Principal y Manejo de Banderas ---
 main() {
   # Parsear argumentos
-  local run_all=0 run_base=0 run_shell=0 run_dev=0 run_neovim=0 run_apps=0 run_office=0 run_fonts=0
+  local run_all=0 run_base=0 run_shell=0 run_dev=0 run_neovim=0 run_apps=0 run_office=0 run_fonts=0 run_configs=0
   local interactive_mode=1
 
   if [[ $# -gt 0 ]]; then
     interactive_mode=0
     while [[ $# -gt 0 ]]; do
       case $1 in
-        --all) run_all=1; shift ;; 
-        --base) run_base=1; shift ;; 
-        --shell) run_shell=1; shift ;; 
-        --dev) run_dev=1; shift ;; 
-        --neovim) run_neovim=1; shift ;; 
-        --apps) run_apps=1; shift ;; 
-        --office) run_office=1; shift ;; 
-        --fonts) run_fonts=1; shift ;; 
-        -h|--help) usage; exit 0 ;; 
-        *) log "Error: Bandera desconocida $1"; usage; exit 1 ;; 
+      --all)
+        run_all=1
+        shift
+        ;;
+      --base)
+        run_base=1
+        shift
+        ;;
+      --shell)
+        run_shell=1
+        shift
+        ;;
+      --dev)
+        run_dev=1
+        shift
+        ;;
+      --neovim)
+        run_neovim=1
+        shift
+        ;;
+      --apps)
+        run_apps=1
+        shift
+        ;;
+      --office)
+        run_office=1
+        shift
+        ;;
+      --fonts)
+        run_fonts=1
+        shift
+        ;;
+      --configs)
+        run_configs=1
+        shift
+        ;;
+      -h | --help)
+        usage
+        exit 0
+        ;;
+      *)
+        log "Error: Bandera desconocida $1"
+        usage
+        exit 1
+        ;;
       esac
     done
   fi
 
   log "== $SCRIPT_NAME iniciado =="
-  
+
   load_config
   require_sudo
 
@@ -338,8 +417,9 @@ main() {
     prompt_yn "¿Instalar herramientas de desarrollo?" "y" && install_dev
     prompt_yn "¿Instalar y configurar Neovim?" "y" && install_neovim
     prompt_yn "¿Instalar aplicaciones de escritorio?" "y" && install_apps
-    prompt_yn "¿Instalar ofimática (LibreOffice)?" "n" && install_office
+    prompt_yn "¿Instalar ofimática (LibreOffice)?" "y" && install_office
     prompt_yn "¿Instalar Nerd Fonts?" "y" && install_fonts
+    prompt_yn "¿Ejecutar script de configuración de dotfiles?" "y" && install_configs
   else
     # Modo Banderas
     log "Iniciando en modo de banderas..."
@@ -350,7 +430,10 @@ main() {
     if [[ $run_all -eq 1 || $run_apps -eq 1 ]]; then install_apps; fi
     if [[ $run_all -eq 1 || $run_office -eq 1 ]]; then install_office; fi
     if [[ $run_all -eq 1 || $run_fonts -eq 1 ]]; then install_fonts; fi
+    if [[ $run_all -eq 1 || $run_configs -eq 1 ]]; then install_configs; fi
   fi
+
+  install_themes
 
   # generate_postinstall_doc
   log "== Setup finalizado =="

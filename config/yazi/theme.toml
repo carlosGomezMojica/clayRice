@@ -1,0 +1,36 @@
+# Kanagawa theme for Yazi
+
+[manager]
+cwd = { fg = "#7E9CD8", bold = true }
+boder = "#2D4F67"
+
+[file]
+# foreground colors
+default = "#C8C093"
+symlink = "#6A95AE"
+hidden = "#54546B"
+
+# background colors
+hovered = "#1F1F28"
+selected = "#223249"
+
+[status]
+bg = "#16161D"
+boder = "#2D4F67"
+
+# mode
+mode_normal = { fg = "#16161D", bg = "#7E9CD8", bold = true }
+mode_select = { fg = "#16161D", bg = "#98BB6C", bold = true }
+mode_unset = { fg = "#16161D", bg = "#C34043", bold = true }
+
+# progress
+progress_label = { fg = "#C8C093", bold = true }
+progress_normal = "#7E9CD8"
+progress_error = "#C34043"
+
+# permissions
+permissions_t = { fg = "#98BB6C" }
+permissions_r = { fg = "#EBCB8B" }
+permissions_w = { fg = "#FF9E64" }
+permissions_x = { fg = "#C34043" }
+permissions_s = { fg = "#957FB8" }

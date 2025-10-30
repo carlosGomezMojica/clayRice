@@ -1,0 +1,13 @@
+# Yazi configuration file
+[shell]
+program = "/usr/bin/zsh"
+args = ["-c"]
+
+[manager]
+theme = "theme.toml"
+
+[opener]
+nvim = ["kitty", "-e", "nvim", "{file}"]
+
+[open]
+rules = [{ name = "*.md", use = "nvim" }]
