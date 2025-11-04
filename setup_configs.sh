@@ -28,6 +28,32 @@ create_symlink() {
   fi
 }
 
+# --- Función para Crear Enlaces Simbólicos de Scripts ---
+create_script_symlinks() {
+  local script_dir="$1"
+  local dest_dir="$2"
+
+  log "Configurando scripts ejecutables..."
+  if [ ! -d "$script_dir" ]; then
+    log "Directorio de scripts $script_dir no encontrado. Saltando."
+    return
+  fi
+
+  mkdir -p "$dest_dir"
+
+  for script in "$script_dir"/*; do
+    if [ -f "$script" ]; then
+      chmod +x "$script" # Asegurar que el script sea ejecutable
+      local script_name
+      script_name=$(basename "$script")
+      log "Creando enlace simbólico para el script $script_name."
+      ln -sf "$script" "$dest_dir/$script_name"
+      log "Enlace simbólico para $script_name creado en $dest_dir."
+    fi
+  done
+}
+
+
 log "== Iniciando script de configuración de dotfiles =="
 
 # --- Enlaces Simbólicos de Directorios de Configuración ---
@@ -39,6 +65,9 @@ create_symlink "$SCRIPT_DIR/config/yazi" "$HOME/.config/yazi" "Yazi"
 
 # --- Enlace Simbólico para .zshrc ---
 create_symlink "$SCRIPT_DIR/config/zsh/zshrc" "$HOME/.zshrc" "Zsh (.zshrc)"
+
+# --- Enlaces Simbólicos para Scripts ---
+create_script_symlinks "$SCRIPT_DIR/config/hypr/scripts" "$HOME/.local/bin"
 
 # --- Themes (Copia de archivos, no enlaces simbólicos) ---
 log "Configurando temas..."
