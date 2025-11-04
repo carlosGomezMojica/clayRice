@@ -17,6 +17,7 @@
     "custom/caffeine",
     "pulseaudio",
     "bluetooth",
+    "network",
     "cpu",
     "memory",
     "temperature",
