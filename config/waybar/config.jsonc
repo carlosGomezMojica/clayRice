@@ -21,14 +21,13 @@
     "cpu",
     "memory",
     "temperature",
-    "clock",
-    "tray"
+    "clock"
   ],
   // Modules configuration
   "bluetooth": {
-    "format": " {status}",
-    "format-disabled": "", // an empty format will hide the module
-    "format-connected": " {device_alias}",
+    "format": "󰂲", // Disconnected or no controller
+    "format-disabled": "󰂲",
+    "format-connected": "<span class=\"bluetooth-connected\">󰂱</span> {device_alias}",
     "tooltip-format": "{device_alias} {device_address}",
     "on-click": "blueman-manager"
   },
@@ -181,15 +180,6 @@
       "balanced": "",
       "power-saver": ""
     }
-  },
-  "network": {
-    // "interface": "wlp2*", // (Optional) To force the use of this interface
-    "format-wifi": "{essid} ({signalStrength}%) ",
-    "format-ethernet": "{ipaddr}/{cidr} ",
-    "tooltip-format": "{ifname} via {gwaddr} ",
-    "format-linked": "{ifname} (No IP) ",
-    "format-disconnected": "Disconnected ⚠",
-    "format-alt": "{ifname}: {ipaddr}/{cidr}"
   },
   "pulseaudio": {
     // "scroll-step": 1, // %, can be a float

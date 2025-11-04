@@ -263,3 +263,7 @@ button:hover {
     /* Red background when inactive */
     background-color: #C34043; /* dragonRed */
 }
+
+.bluetooth-connected {
+    color: #98BB6C; /* lotusGreen */
+}
