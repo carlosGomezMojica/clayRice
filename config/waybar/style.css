@@ -75,6 +75,7 @@ button:hover {
 #idle_inhibitor,
 #scratchpad,
 #power-profiles-daemon,
+#custom-caffeine,
 #mpd {
     padding: 0 10px;
 }
@@ -229,7 +230,24 @@ button:hover {
 #memory,
 #temperature,
 #clock,
+#custom-caffeine,
 #tray {
     border-radius: 12px;
     margin: 1px;
+}
+
+/* --- Caffeine Module --- */
+#custom-caffeine {
+    /* Icon color for both states */
+    color: #1F1F28; /* sumiInk1 */
+}
+
+#custom-caffeine.active {
+    /* Green background when active */
+    background-color: #98BB6C; /* lotusGreen */
+}
+
+#custom-caffeine.inactive {
+    /* Red background when inactive */
+    background-color: #C34043; /* dragonRed */
 }

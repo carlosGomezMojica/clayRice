@@ -14,6 +14,7 @@
     "hyprland/window"
   ],
   "modules-right": [
+    "custom/caffeine",
     "pulseaudio",
     "cpu",
     "memory",
@@ -208,7 +209,7 @@
         ""
       ]
     },
-    "on-click": "/home/withclay/clayRice/config/waybar/scripts/toggle-pavucontrol.sh"
+    "on-click": "~/.config/waybar/scripts/toggle-pavucontrol.sh"
   },
   "custom/media": {
     "format": "{icon} {text}",
@@ -237,5 +238,12 @@
   "custom/lock": {
     "format": "",
     "on-click": "hyprlock"
+  },
+  "custom/caffeine": {
+    "format": "{}",
+    "return-type": "json",
+    "exec": "~/.config/waybar/scripts/caffeine-status.sh",
+    "on-click": "~/.config/waybar/scripts/toggle-caffeine.sh && pkill -RTMIN+8 waybar",
+    "interval": 10
   }
 }
