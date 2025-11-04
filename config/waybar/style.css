@@ -77,7 +77,8 @@ button:hover {
 #power-profiles-daemon,
 #custom-caffeine,
 #mpd,
-#bluetooth {
+#bluetooth,
+#custom-wifi {
     padding: 0 10px;
 }
 

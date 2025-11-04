@@ -32,7 +32,7 @@
     "on-click": "blueman-manager"
   },
   "custom/wifi": {
-    "format": " {}",
+    "format": "{}",
     "return-type": "json",
     "exec": "~/.config/waybar/scripts/wifi-status.sh",
     "on-click": "nm-connection-editor"
