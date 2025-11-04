@@ -184,6 +184,11 @@ button:hover {
     color: #1F1F28; /* sumiInk1 */
 }
 
+#custom-wifi {
+    background-color: #6A95AE; /* dragonBlue */
+    color: #1F1F28; /* sumiInk1 */
+}
+
 #custom-media {
     background-color: #87A98A; /* dragonGreen */
     color: #1F1F28; /* sumiInk1 */
@@ -237,7 +242,8 @@ button:hover {
 #clock,
 #custom-caffeine,
 #tray,
-#bluetooth {
+#bluetooth,
+#custom-wifi {
     border-radius: 12px;
     margin: 1px;
 }
