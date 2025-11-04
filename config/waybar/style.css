@@ -76,7 +76,8 @@ button:hover {
 #scratchpad,
 #power-profiles-daemon,
 #custom-caffeine,
-#mpd {
+#mpd,
+#bluetooth {
     padding: 0 10px;
 }
 
