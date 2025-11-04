@@ -179,6 +179,11 @@ button:hover {
     background-color: #54546B; /* sumiInk4 */
 }
 
+#bluetooth {
+    background-color: #7E9CD8; /* lotusBlue */
+    color: #1F1F28; /* sumiInk1 */
+}
+
 #custom-media {
     background-color: #87A98A; /* dragonGreen */
     color: #1F1F28; /* sumiInk1 */
@@ -231,7 +236,8 @@ button:hover {
 #temperature,
 #clock,
 #custom-caffeine,
-#tray {
+#tray,
+#bluetooth {
     border-radius: 12px;
     margin: 1px;
 }

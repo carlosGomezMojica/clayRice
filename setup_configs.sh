@@ -62,6 +62,7 @@ create_symlink "$SCRIPT_DIR/config/waybar" "$HOME/.config/waybar" "Waybar"
 create_symlink "$SCRIPT_DIR/config/kitty" "$HOME/.config/kitty" "Kitty"
 create_symlink "$SCRIPT_DIR/config/fuzzel" "$HOME/.config/fuzzel" "Fuzzel"
 create_symlink "$SCRIPT_DIR/config/yazi" "$HOME/.config/yazi" "Yazi"
+create_symlink "$SCRIPT_DIR/config/calcurse" "$HOME/.config/calcurse" "Calcurse"
 
 # --- Enlace Simbólico para .zshrc ---
 create_symlink "$SCRIPT_DIR/config/zsh/zshrc" "$HOME/.zshrc" "Zsh (.zshrc)"

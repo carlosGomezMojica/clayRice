@@ -1,0 +1,37 @@
+# Calcurse configuration file
+# Themed for Kanagawa
+
+# Layout settings
+layout.default=1
+layout.sidebar-width=30
+
+# Esta es la sección de colores dentro de ~/.calcurse/conf
+# Los números representan los colores ANSI de la terminal (ej: 0=Black, 1=Red, 7=White)
+# Los nombres como 'default', 'black', 'white', 'blue', etc., también funcionan.
+
+general.default_color=white
+general.default_attr=
+general.border_color=white
+general.border_attr=
+general.today_color=brightred
+general.today_attr=
+general.select_color=black
+general.select_attr=reverse
+calendar.day_color=blue
+calendar.day_attr=
+calendar.weekend_color=green
+calendar.weekend_attr=
+calendar.weeknum_color=cyan
+calendar.weeknum_attr=
+apoint.now_color=red
+apoint.now_attr=reverse
+apoint.color=yellow
+apoint.attr=
+apoint.daychange_color=blue
+apoint.daychange_attr=
+apoint.recurrent_color=cyan
+apoint.recurrent_attr=
+todo.color=magenta
+todo.attr=
+todo.overdue_color=red
+todo.overdue_attr=
