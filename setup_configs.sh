@@ -92,7 +92,36 @@ copy_config_files() {
 
 copy_config_files "$THEME_CONFIG_SRC_DIR/kvantum" "$CONFIG_DEST_DIR/Kvantum" "Kvantum"
 copy_config_files "$THEME_CONFIG_SRC_DIR/qt5ct" "$CONFIG_DEST_DIR/qt5ct" "qt5ct"
-copy_config_files "$THEME_CONFIG_SRC_DIR/qt6ct" "$CONFIG_DEST_DIR/qt6ct" "qt6ct"
+copy_config_files "$THEME_CONFIG_SRC_DIR/qt6ct" "$CONFIG_DEST_DIR/qt6ct" "qt6t"
 
+setup_blueman_theme() {
+  log "Configurando tema de Blueman..."
+  local theme_src_dir="$SCRIPT_DIR/config/themes/KanagawaBlueman"
+  local theme_dest_dir="$HOME/.local/share/themes"
+  local app_launcher_src="/usr/share/applications/blueman-manager.desktop"
+  local app_launcher_dest="$HOME/.local/share/applications/blueman-manager.desktop"
+
+  if [ -d "$theme_src_dir" ]; then
+    log "Copiando tema de Blueman a $theme_dest_dir..."
+    mkdir -p "$theme_dest_dir"
+    cp -r "$theme_src_dir" "$theme_dest_dir/"
+    log "Tema de Blueman copiado."
+  else
+    log "No se encontró el directorio del tema de Blueman. Saltando."
+    return
+  fi
+
+  if [ -f "$app_launcher_src" ]; then
+    log "Copiando y modificando el lanzador de Blueman..."
+    mkdir -p "$(dirname "$app_launcher_dest")"
+    cp "$app_launcher_src" "$app_launcher_dest"
+    sed -i 's/^Exec=blueman-manager/Exec=env GTK_THEME=KanagawaBlueman blueman-manager/' "$app_launcher_dest"
+    log "Lanzador de Blueman modificado para usar el tema KanagawaBlueman."
+  else
+    log "No se encontró el lanzador de Blueman en $app_launcher_src. Saltando."
+  fi
+}
+
+setup_blueman_theme
 
 log "== Script de configuración de dotfiles finalizado =="
