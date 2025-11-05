@@ -7,53 +7,52 @@
   "spacing": 4, // Gaps between modules (4px)
   // Choose the order of the modules
   "modules-left": [
-    "hyprland/workspaces",
-    "hyprland/mode"
+    "hyprland/window"
   ],
   "modules-center": [
-    "hyprland/window"
+    "hyprland/workspaces"
   ],
   "modules-right": [
     "custom/caffeine",
     "pulseaudio",
-    "bluetooth",
-    "custom/wifi",
+    "tray",
     "cpu",
     "memory",
     "temperature",
     "clock"
   ],
   // Modules configuration
-  "bluetooth": {
-    "format": "󰂲", // Disconnected or no controller
-    "format-disabled": "󰂲",
-    "format-connected": "<span class=\"bluetooth-connected\">󰂱</span> {device_alias}",
-    "tooltip-format": "{device_alias} {device_address}",
-    "on-click": "blueman-manager"
-  },
-  "custom/wifi": {
-    "format": "{}",
-    "return-type": "json",
-    "exec": "~/.config/waybar/scripts/wifi-status.sh",
-    "on-click": "nm-connection-editor"
+  "hyprland/window": {
+    "max-length": 35,
+    "rewrite": {
+      "": "Nothing to do!!"
+    }
   },
   "hyprland/workspaces": {
-    "disable-scroll": true,
-    "all-outputs": true,
-    "warp-on-scroll": false,
-    "persistent-workspaces": {
-      "1": [],
-      "2": [],
-      "3": [],
-      "4": [],
-      "5": []
+    "format": "{icon} {windows}",
+    "format-window-separator": " ",
+    "window-rewrite-default": "",
+    "window-rewrite": {
+      "title<.*youtube.*>": "", // Windows whose titles contain "youtube"
+      "class<zen>": "", // Windows whose classes are "firefox"
+      "class<zen> title<.*github.*>": "", // Windows whose class is "firefox" and title contains "github". Note that "class" always comes first.
+      "class<Postman>": "",
+      "class<MongoDB Compass>": "",
+      "class<kitty>": "", // Windows that contain "foot" in either class or title. For optimization reasons, it will only match against a title if at least one other window explicitly matches against a title.
+      "title<n>": "",
+      "title<nvim>": "",
+      "title<.*Yazi.*>": "",
+      "class<.*zathura.*>": "󰈦",
+      "class<Spotify>": "󰓇"
     },
-    "active-only": false,
-    "format": "{name}|{icon}",
     "format-icons": {
-      "urgent": "",
-      "active": "",
-      "default": ""
+      "1": "1",
+      "2": "2",
+      "3": "3",
+      "active": ""
+    },
+    "persistent-workspaces": {
+      "*": 3
     }
   },
   "keyboard-state": {

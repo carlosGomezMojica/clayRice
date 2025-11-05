@@ -193,6 +193,8 @@ setup_services() {
   log "Habilitando servicios de audio PipeWire..."
   run "systemctl --user enable --now pipewire-pulse.socket"
   run "systemctl --user enable --now wireplumber.service"
+  log "Habilitando NetworkManager..."
+  run "$SUDO systemctl enable --now NetworkManager.service"
   # Otros servicios para Hyprland pueden ser añadidos aquí
 }
 
