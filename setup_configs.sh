@@ -53,7 +53,6 @@ create_script_symlinks() {
   done
 }
 
-
 log "== Iniciando script de configuración de dotfiles =="
 
 # --- Enlaces Simbólicos de Directorios de Configuración ---
@@ -110,5 +109,22 @@ install_gtk_themes() {
 }
 
 install_gtk_themes
+
+set_default_wallpaper() {
+  log "Configurando fondo de pantalla predeterminado..."
+  local default_wallpaper="$HOME/Pictures/wallpaper/sushi.jpg"
+  if [ -f "$default_wallpaper" ]; then
+    swww img "$default_wallpaper" \
+      --transition-type grow \
+      --transition-step 90 \
+      --transition-fps 60 \
+      --transition-pos 0.5,0.5
+    log "Fondo de pantalla predeterminado establecido: $default_wallpaper"
+  else
+    log "Advertencia: El fondo de pantalla predeterminado $default_wallpaper no se encontró."
+  fi
+}
+
+set_default_wallpaper
 
 log "== Script de configuración de dotfiles finalizado =="
