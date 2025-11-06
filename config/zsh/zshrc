@@ -108,6 +108,8 @@ fi
 
 source $ZSH/oh-my-zsh.sh
 # --- Configuración Personalizada ---
+# Inicializar el agente ssh
+eval "$(ssh-agent -s)"
 # Inicializar Zoxide
 eval "$(zoxide init zsh)"
 # Alias personalizados
