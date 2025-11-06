@@ -14,15 +14,24 @@ window#waybar.hidden {
     opacity: 0.2;
 }
 
+button {
+  min-height: 24px;
+  min-width: 16px;
+  padding: 0px 6px;
+  border-radius: 12px;
+  font-weight: 500;
+}
+
 #workspaces button label {
     color: #C8C093;
-    padding: 0 5px;
 }
+
 
 #workspaces button.active label{
   color: #B85E80;
-  background-color: #2D4F67;
+  background-color: #16161D;
   border-radius: 10px;
+  padding: 0 10px;
 }
 
 #workspaces button:not(.empty):not(.active) label{
@@ -130,6 +139,7 @@ window#waybar.hidden {
 
 #backlight {
     background-color: #5D7A8C; /* waveBlue3 */
+    color:#1F1F28;
 }
 
 #network {
@@ -215,6 +225,8 @@ window#waybar.hidden {
 #clock,
 #custom-caffeine,
 #tray,
+#battery,
+#backlight,
 #bluetooth{
     border-radius: 12px;
     margin: 1px;

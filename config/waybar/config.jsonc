@@ -7,18 +7,19 @@
   "spacing": 4, // Gaps between modules (4px)
   // Choose the order of the modules
   "modules-left": [
+    "custom/caffeine",
     "hyprland/window"
   ],
   "modules-center": [
     "hyprland/workspaces"
   ],
   "modules-right": [
-    "custom/caffeine",
     "pulseaudio",
     "tray",
-    "cpu",
+    "backlight",
     "memory",
     "temperature",
+    "battery",
     "clock"
   ],
   // Modules configuration
@@ -43,7 +44,11 @@
       "title<nvim>": "",
       "title<.*Yazi.*>": "",
       "class<.*zathura.*>": "󰈦",
-      "class<Spotify>": "󰓇"
+      "class<Spotify>": "󰓇",
+      "class<libreoffice-calc>": "󱎏",
+      "class<libreoffice-writer>": "󱎒",
+      "class<libreoffice-impress>": "󱎐",
+      "class<libreoffice-draw>": "󰝇"
     },
     "format-icons": {
       "1": "1",
@@ -116,7 +121,7 @@
     "tooltip": false
   },
   "memory": {
-    "format": "{}% "
+    "format": "{}% "
   },
   "temperature": {
     // "thermal-zone": 2,
@@ -125,9 +130,9 @@
     // "format-critical": "{temperatureC}°C {icon}",
     "format": "{temperatureC}°C {icon}",
     "format-icons": [
-      "",
+      "",
       "",
-      ""
+      ""
     ]
   },
   "backlight": {
@@ -147,23 +152,27 @@
   },
   "battery": {
     "states": {
-      // "good": 95,
+      "good": 95,
       "warning": 30,
       "critical": 15
     },
     "format": "{capacity}% {icon}",
     "format-full": "{capacity}% {icon}",
-    "format-charging": "{capacity}% ",
+    "format-charging": "{capacity}% 󰂄",
     "format-plugged": "{capacity}% ",
     "format-alt": "{time} {icon}",
     // "format-good": "", // An empty format will hide the module
     // "format-full": "",
     "format-icons": [
-      "",
-      "",
-      "",
-      "",
-      ""
+      "󰁺",
+      "󰁻",
+      "󰁼",
+      "󰁽",
+      "󰁾",
+      "󰁿",
+      "󰂀",
+      "󰂁",
+      "󰂂"
     ]
   },
   "battery#bat2": {
@@ -184,8 +193,8 @@
     // "scroll-step": 1, // %, can be a float
     "format": "{volume}% {icon} {format_source}",
     "format-bluetooth": "{volume}% {icon} {format_source}",
-    "format-bluetooth-muted": " {icon} {format_source}",
-    "format-muted": " {format_source}",
+    "format-bluetooth-muted": "󰝟 {icon} {format_source}",
+    "format-muted": "󰝟 {format_source}",
     "format-source": "{volume}% ",
     "format-source-muted": "",
     "format-icons": {
@@ -214,18 +223,6 @@
     "escape": true,
     "exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null" // Script in resources folder
     // "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
-  },
-  "custom/power": {
-    "format": "⏻ ",
-    "tooltip": false,
-    "menu": "on-click",
-    "menu-file": "$HOME/.config/waybar/power_menu.xml", // Menu file in resources folder
-    "menu-actions": {
-      "shutdown": "shutdown",
-      "reboot": "reboot",
-      "suspend": "systemctl suspend",
-      "hibernate": "systemctl hibernate"
-    }
   },
   "custom/lock": {
     "format": "",
