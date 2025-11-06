@@ -1,0 +1,3 @@
+# Iniciar el agente SSH y añadir la llave
+eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/id_ed25519_github

@@ -66,6 +66,7 @@ create_symlink "$SCRIPT_DIR/wallpapers" "$HOME/Pictures/wallpapers" "Wallpaper"
 
 # --- Enlace Simbólico para .zshrc ---
 create_symlink "$SCRIPT_DIR/config/zsh/zshrc" "$HOME/.zshrc" "Zsh (.zshrc)"
+create_symlink "$SCRIPT_DIR/config/zprofile" "$HOME/.zprofile" "Zprofile (.zprofile)"
 
 # --- Enlaces Simbólicos para Scripts ---
 create_script_symlinks "$SCRIPT_DIR/config/hypr/scripts" "$HOME/.local/bin"
