@@ -106,5 +106,5 @@ VARIABLES DE ENTORNO:
 - [ ] widget para ver la canción y canva.
 - [ ] Panel para cerrar cesion, apagar y reiniciar el computador de forma grafica.
 - [ ] Panel que se muestre cuando se realice mausower sobre el boton.
-- [ ] Menu fuzzel para abrir las notas de mi segundo cerebro digital.
+- [x] Menu fuzzel para abrir las notas de mi segundo cerebro digital.
 
